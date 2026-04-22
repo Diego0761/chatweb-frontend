@@ -3,6 +3,7 @@ import api from '../utils/axios'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { socket } from '../utils/socket'
+import loadingIcon from '../assets/loading.svg'
 
 type AuthResponse = {
   token: string
@@ -17,6 +18,7 @@ export function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -29,6 +31,8 @@ export function Register() {
     setError('')
 
     try {
+      setLoading(true)
+
       const res = await api.post<AuthResponse>('/auth/register', {
         username,
         email,
@@ -44,6 +48,8 @@ export function Register() {
       if (axios.isAxiosError<AuthError>(err)) {
         setError(err.response?.data?.error || 'Erro ao fazer login')
       }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -83,9 +89,14 @@ export function Register() {
 
         <button
           type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors"
+          disabled={loading}
+          className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Register
+          {loading ? (
+            <img src={loadingIcon} className="animate-spin h-6 w-6 mx-auto" />
+          ) : (
+            'Register'
+          )}
         </button>
 
         <p className="text-gray-400 text-sm text-center">

@@ -3,6 +3,7 @@ import api from '../utils/axios'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { socket } from '../utils/socket'
+import loadingIcon from "../assets/loading.svg"
 
 type AuthResponse = {
   token: string
@@ -16,6 +17,7 @@ export function Login() {
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,9 +25,10 @@ export function Login() {
     if (token) navigate('/chat')
   }, [])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
+    setLoading(true)
 
     try {
       const res = await api.post<AuthResponse>('/auth/login', {
@@ -37,19 +40,23 @@ export function Login() {
       socket.auth = { token }
       socket.connect()
       window.location.href = '/'
-
     } catch (err) {
       if (axios.isAxiosError<AuthError>(err)) {
         setError(
           err.response?.data?.error || err.message || 'Erro ao fazer login'
         )
       }
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-950">
-      <div className="bg-gray-900 p-8 rounded-xl w-full max-w-sm flex flex-col gap-4">
+      <form
+        className="bg-gray-900 p-8 rounded-xl w-full max-w-sm flex flex-col gap-4"
+        onSubmit={handleSubmit}
+      >
         <h1 className="text-white text-2xl font-bold">Login</h1>
 
         <input
@@ -71,10 +78,18 @@ export function Login() {
         {error && <p className="text-red-400 text-sm">{error}</p>}
 
         <button
-          onClick={handleSubmit}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors"
+          type="submit"
+          disabled={loading}
+          className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Login
+          {loading ? (
+            <img
+              src={loadingIcon}
+              className="animate-spin h-6 w-6 mx-auto"
+            />
+          ) : (
+            'Login'
+          )}
         </button>
 
         <p className="text-gray-400 text-sm text-center">
@@ -83,7 +98,7 @@ export function Login() {
             Sign Up
           </a>
         </p>
-      </div>
+      </form>
     </div>
   )
 }
