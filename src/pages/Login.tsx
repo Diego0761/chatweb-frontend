@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import api from '../utils/axios'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { socket } from '../utils/socket'
 
 type AuthResponse = {
   token: string
@@ -33,7 +34,10 @@ export function Login() {
       })
       const token = await res.data.token
       localStorage.setItem('token', token)
-      navigate('/chat')
+      socket.auth = { token }
+      socket.connect()
+      window.location.href = '/'
+
     } catch (err) {
       if (axios.isAxiosError<AuthError>(err)) {
         setError(
