@@ -7,12 +7,14 @@ import { Form } from '../components/Form'
 import { UserManager } from '../components/UserManager'
 import type { TMessage } from '../types'
 import { getUser } from '../utils/getUser'
+import { useNavigate } from 'react-router-dom'
 
 export function Chat() {
   const [messages, setMessages] = useState<TMessage[]>([])
   const [isConnected, setIsConnected] = useState(socket.connected)
   const [input, setInput] = useState('')
   const currentUser = getUser()
+  const navigate = useNavigate()
 
   useEffect(() => {
     function onConnect() {
