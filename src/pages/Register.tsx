@@ -39,14 +39,12 @@ export function Register() {
 
       socket.auth = { token }
       socket.connect()
-      navigate('/chat')
+      window.location.href = '/'
     } catch (err) {
       if (axios.isAxiosError<AuthError>(err)) {
         setError(err.response?.data?.error || 'Erro ao fazer login')
       }
     }
-
-    navigate('/chat')
   }
 
   return (
