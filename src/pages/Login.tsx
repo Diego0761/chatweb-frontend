@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import api from '../utils/axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 type AuthResponse = {
@@ -36,7 +36,9 @@ export function Login() {
       navigate('/chat')
     } catch (err) {
       if (axios.isAxiosError<AuthError>(err)) {
-        setError(err.response?.data?.error || err.message || 'Erro ao fazer login')
+        setError(
+          err.response?.data?.error || err.message || 'Erro ao fazer login'
+        )
       }
     }
   }
@@ -73,9 +75,9 @@ export function Login() {
 
         <p className="text-gray-400 text-sm text-center">
           Doesn't have an account?{' '}
-          <a href="/register" className="text-blue-400 hover:underline">
+          <Link to="/register" className="text-blue-400 hover:underline">
             Sign Up
-          </a>
+          </Link>
         </p>
       </div>
     </div>

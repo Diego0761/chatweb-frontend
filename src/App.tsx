@@ -15,7 +15,15 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+      <Route path="/" element={<Navigate to="/register" />} />
+      <Route
+        path="/chat"
+        element={
+          <ProtectedRoute>
+            <Chat />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<div>404 Not Found</div>} />

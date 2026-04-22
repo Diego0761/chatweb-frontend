@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import api from '../utils/axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { socket } from '../utils/socket'
 
@@ -92,9 +92,9 @@ export function Register() {
 
         <p className="text-gray-400 text-sm text-center">
           Already have an account?{' '}
-          <a href="/login" className="text-blue-400 hover:underline">
+          <Link to="/login" className="text-blue-400 hover:underline">
             Login
-          </a>
+          </Link>
         </p>
       </form>
     </div>
