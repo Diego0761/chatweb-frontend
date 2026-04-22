@@ -75,9 +75,9 @@ export function Login() {
 
         <p className="text-gray-400 text-sm text-center">
           Doesn't have an account?{' '}
-          <Link to="/register" className="text-blue-400 hover:underline">
+          <a href="/register" className="text-blue-400 hover:underline">
             Sign Up
-          </Link>
+          </a>
         </p>
       </div>
     </div>
